@@ -1,5 +1,5 @@
 from django.urls import path, include
 
-routes = [
+users_routes = [
     path("user/", include("users.urls")),
 ]

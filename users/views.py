@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class UsersModelViewSet(ModelViewSet):
     """
-    CRUD to manually change the user by the administrator/manager.
+    CRUD to manually change the user by the managers/teachers.
     """
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
