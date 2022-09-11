@@ -22,7 +22,11 @@ class UserStatus(models.TextChoices):
 
 class CustomUser(AbstractUser):
     status = models.CharField(max_length=10, choices=UserStatus.choices, default=UserStatus.ACTIVE)
-    role = models.CharField(max_length=10, choices=UserRole.choices, blank=True, null=True)
+    role = models.CharField(
+        max_length=10,
+        choices=UserRole.choices,
+        default=UserRole.STUDENT
+    )
     group = models.ForeignKey(
         Group, on_delete=models.SET_NULL, related_name="student", null=True, blank=True
     )
