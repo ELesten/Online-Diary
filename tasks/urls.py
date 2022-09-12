@@ -7,7 +7,7 @@ router.register(r"tasks", TaskModelViewSet)
 router.register(r"homework", HomeworkModelViewSet)
 urlpatterns = [
     path("", include(router.urls)),
-    path("my-homework/", StudentHomeworkListApiView.as_view()),
+    path("my-homework/", StudentHomeworkListCreateApiView.as_view()),
     path("my-homework/<int:pk>/", StudentHomeworkDetailApiView.as_view()),
 
 
