@@ -17,6 +17,28 @@ class TaskModelViewSet(ModelViewSet):
     queryset = Task.objects.all()
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
 
+    def list(self, request, *args, **kwargs):
+        if request.user.role == "Student":
+            queryset = self.filter_queryset(
+                self.get_queryset().filter(
+                    responsible_group=request.user.group)
+            )
+        elif request.user.role == "Teacher":
+            queryset = self.filter_queryset(
+                self.get_queryset().filter(
+                    responsible_group__in=request.user.lead_groups.values("id"))
+            )
+        else:
+            queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class HomeworkModelViewSet(ModelViewSet):
     """
@@ -85,4 +107,7 @@ class StudentHomeworkDetailApiView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-### При изменении объекта дз изменяетя и автор(исправить)
+class TaskCommentModelViewSet(ModelViewSet):
+    queryset = TaskComment
+    serializer_class = TaskCommentSerializer
+    permission_classes = [IsAuthenticated]

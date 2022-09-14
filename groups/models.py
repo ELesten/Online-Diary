@@ -27,7 +27,7 @@ class Group(models.Model):
         related_name="lead_groups",
         limit_choices_to={"role": UserRole.TEACHER},
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
     )
     group_status = models.CharField(
         max_length=255, choices=GroupStatus.choices, default=GroupStatus.PREPARING
