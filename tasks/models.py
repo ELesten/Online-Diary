@@ -8,7 +8,7 @@ from groups.models import Group
 class HomeworkStatus(models.TextChoices):
     PENDING_VERIFICATION = "Pending verification"
     COMPLETED = "Completed"
-    NOT_SATISFIED = "Wrong"
+    WRONG = "Wrong"
 
 # MODELS
 
@@ -24,7 +24,7 @@ class Task(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     deadline = models.DateTimeField()
-    responsible_group = models.ManyToManyField(Group, related_name="task", blank=True)
+    responsible_group = models.ForeignKey(Group, related_name="task", on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.task_name
@@ -43,3 +43,14 @@ class Homework(models.Model):
 
     def __str__(self):
         return f"Homework {self.connection_with_task.task_name} by {self.author.username}"
+
+
+class TaskComment(models.Model):
+    text = models.TextField()
+    task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, related_name="comment")
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="comment")
+
+
+class HomeworkComment(models.Model):
+    text = models.TextField()
+    homework = models.ForeignKey(Homework, on_delete=models.SET_NULL, null=True, related_name="comment")

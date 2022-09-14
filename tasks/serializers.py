@@ -23,3 +23,11 @@ class StudentHomeworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Homework
         fields = ["connection_with_task", "description", "links", "author", "id"] ## Убрать поле "id" после успешных тестов
+
+
+class TaskCommentSerializer(serializers.ModelSerializer):
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault)
+
+    class Meta:
+        model = Task
+        fields = "__all__"
