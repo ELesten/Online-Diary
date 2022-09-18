@@ -6,36 +6,7 @@ from project_settings.permissions import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
-
-
-def role_check(self, request, serializer_class):
-    if serializer_class == TaskSerializer and request.user.role == "Student":
-        queryset = self.filter_queryset(
-            self.get_queryset().filter(
-                responsible_group=request.user.group
-            )
-        )
-    elif serializer_class == TaskSerializer and request.user.role == "Teacher":
-        queryset = self.filter_queryset(
-            self.get_queryset().filter(
-                responsible_group__in=request.user.lead_groups.values("id")
-            )
-        )
-    elif serializer_class == TaskCommentSerializer and request.user.role == "Student":
-        queryset = self.filter_queryset(
-            self.get_queryset().filter(
-                task__responsible_group=request.user.group
-            )
-        )
-    elif serializer_class == TaskCommentSerializer and request.user.role == "Teacher":
-        queryset = self.filter_queryset(
-            self.get_queryset().filter(
-                task__responsible_group__in=request.user.lead_groups.values("id")
-            )
-        )
-    else:
-        queryset = self.filter_queryset(self.get_queryset())
-    return queryset
+from .functions import role_check
 
 
 class TaskModelViewSet(ModelViewSet):
