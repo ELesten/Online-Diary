@@ -26,8 +26,8 @@ class StudentHomeworkSerializer(serializers.ModelSerializer):
 
 
 class TaskCommentSerializer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault)
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
-        model = Task
+        model = TaskComment
         fields = "__all__"

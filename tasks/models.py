@@ -50,6 +50,9 @@ class TaskComment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, related_name="comment")
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="comment")
 
+    def __str__(self):
+        return f"Comment to {self.task} by {self.author.username}"
+
 
 class HomeworkComment(models.Model):
     text = models.TextField()
