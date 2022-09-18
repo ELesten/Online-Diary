@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from groups.models import Group
+from apps.groups.models import Group
 
 # CHOICES
 

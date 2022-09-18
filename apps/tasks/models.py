@@ -1,6 +1,6 @@
 from django.db import models
-from users.models import CustomUser
-from groups.models import Group
+from apps.users.models import CustomUser
+from apps.groups.models import Group
 
 # CHOICES
 
