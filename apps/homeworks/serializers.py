@@ -3,7 +3,6 @@ from .models import *
 
 
 class HomeworkSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Homework
         fields = "__all__"
@@ -14,4 +13,12 @@ class StudentHomeworkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Homework
-        fields = ["connection_with_task", "description", "links", "author", "id"] ## Убрать поле "id" после успешных тестов
+        fields = ["connection_with_task", "description", "links", "author", "id"]  ## Убрать поле "id" после успешных тестов
+
+
+class HomeworkCommentSerializer(serializers.ModelSerializer):
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = HomeworkComment
+        fields = "__all__"

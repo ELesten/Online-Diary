@@ -25,9 +25,13 @@ class Homework(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="homework")
 
     def __str__(self):
-        return f"Homework {self.connection_with_task.task_name} by {self.author.username}"
+        return f"Homework for the task {self.connection_with_task.task_name} by {self.author.username}"
 
 
 class HomeworkComment(models.Model):
     text = models.TextField()
     homework = models.ForeignKey(Homework, on_delete=models.SET_NULL, null=True, related_name="comment")
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="homework_comment")
+
+    def __str__(self):
+        return f"Comment to homework № {self.homework.id} by {self.author.username}"
