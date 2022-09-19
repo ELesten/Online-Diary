@@ -17,44 +17,46 @@ class HomeworkModelViewSet(ModelViewSet):
     permission_classes = [IsSchoolRepresentative]
 
 
-class StudentHomeworkListCreateApiView(APIView):
+class HomeworkCommentModelViewSet(ModelViewSet):
     """
-    Endpoint for student to getting all homeworks associated with him and
-    create new homework.
+    CRUD to work with homework comments by the managers/teachers.
+    """
+    serializer_class = HomeworkCommentSerializer
+    queryset = HomeworkComment.objects.all()
+    permission_classes = [IsSchoolRepresentative]
+
+
+class StudentHomeworkApiView(APIView):
+    """
+    Endpoint for student to getting all homeworks associated with him
+    and a detailed modification of each of them.
     """
     serializer_class = StudentHomeworkSerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, pk=None):
+        if pk:
+            serializer = self.serializer_class(
+                get_object_or_404(
+                    Homework.objects.filter(author=request.user.id), pk=pk)
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         serializer = self.serializer_class(
-            Homework.objects.filter(author=request.user.id),
-            many=True
-        )
+            Homework.objects.filter(author=request.user.id), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, pk=None):
+        user_group = Task.objects.filter(responsible_group=request.user.group).values_list("id", flat=True)
+        if int(request.data.get("connection_with_task")) not in user_group:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         serializer = self.serializer_class(context={'request': request}, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class StudentHomeworkDetailApiView(APIView):
-    """
-    Endpoint for student to getting/change selected homework.
-    """
-    serializer_class = StudentHomeworkSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk):
-        serializer = self.serializer_class(
-            get_object_or_404(
-                Homework.objects.filter(author=request.user.id),
-                pk=pk
-            )
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk):
         instance = get_object_or_404(
@@ -73,3 +75,18 @@ class StudentHomeworkDetailApiView(APIView):
         instance = get_object_or_404(Homework.objects.filter(author=request.user.id), pk=pk)
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class HomeworkCommentApiView(APIView):
+    serializer_class = HomeworkCommentSerializer
+    permission_classes = [IsSchoolRepresentativeOrReadOnly]
+
+    def get(self, request, pk):
+        serializer = self.serializer_class(
+            get_object_or_404(
+                HomeworkComment.objects.filter(
+                    homework__connection_with_task__responsible_group=request.user.group, pk=pk
+                )
+            )
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
