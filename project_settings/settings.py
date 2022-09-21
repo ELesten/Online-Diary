@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.homeworks',
     'apps.lessons',
+    'apps.merch',
 
 ]
 
