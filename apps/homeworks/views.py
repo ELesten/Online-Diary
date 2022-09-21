@@ -28,7 +28,7 @@ class HomeworkCommentModelViewSet(ModelViewSet):
 
 class StudentHomeworkApiView(APIView):
     """
-    Endpoint for student to getting all homeworks associated with him
+    CRUD for student to getting all homeworks associated with him
     and a detailed modification of each of them.
     """
     serializer_class = StudentHomeworkSerializer
@@ -78,10 +78,14 @@ class StudentHomeworkApiView(APIView):
 
 
 class HomeworkCommentApiView(APIView):
+    """
+    CRUD to work with homework comments by the managers/teachers.
+    Students only have permissions to safe methods.
+    """
     serializer_class = HomeworkCommentSerializer
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
 
-    def get(self, request, pk):
+    def get(self, request, pk=None):
         serializer = self.serializer_class(
             get_object_or_404(
                 HomeworkComment.objects.filter(
@@ -90,3 +94,30 @@ class HomeworkCommentApiView(APIView):
             )
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, pk=None):
+        serializer = self.serializer_class(context={'request': request}, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk):
+        instance = get_object_or_404(
+            HomeworkComment.objects.filter(author=request.user.id),
+            pk=pk
+        )
+        serializer = self.serializer_class(
+            instance, context={'request': request},
+            data=request.data
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        instance = get_object_or_404(HomeworkComment.objects.filter(author=request.user.id), pk=pk)
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

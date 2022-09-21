@@ -4,7 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from project_settings.permissions import *
 from rest_framework.permissions import IsAuthenticated
-from .functions import role_check
+from .functions import task_comment_role_check, task_role_check
 
 
 class TaskModelViewSet(ModelViewSet):
@@ -17,7 +17,7 @@ class TaskModelViewSet(ModelViewSet):
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
 
     def list(self, request, *args, **kwargs):
-        queryset = role_check(self, request, serializer_class=TaskSerializer)
+        queryset = task_role_check(self, request)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -40,7 +40,7 @@ class TaskCommentModelViewSet(ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        queryset = role_check(self, request, serializer_class=TaskCommentSerializer)
+        queryset = task_comment_role_check(self, request)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
