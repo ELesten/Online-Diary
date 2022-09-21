@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.tasks',
     'apps.users',
     'apps.homeworks',
+    'apps.lessons',
 
 ]
 

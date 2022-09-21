@@ -6,4 +6,5 @@ routes = [
     path("user/", include("apps.users.urls")),
     path("homework/", include("apps.homeworks.urls")),
     path("group/", include("apps.groups.urls")),
+    path("lesson/", include("apps.lessons.urls"))
 ]
