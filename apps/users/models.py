@@ -30,6 +30,7 @@ class CustomUser(AbstractUser):
     group = models.ForeignKey(
         Group, on_delete=models.SET_NULL, related_name="student", null=True, blank=True
     )
+    currency = models.IntegerField(null=True, blank=True)
 
     class Meta(AbstractUser.Meta):
         swappable = "AUTH_USER_MODEL"
