@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 
 class MerchModelViewSet(ModelViewSet):
-    queryset = Merch.objects.all()
+    queryset = MerchShop.objects.all()
     serializer_class = MerchSerializer
     permission_classes = [IsSchoolRepresentative]
 
@@ -23,37 +23,45 @@ class MerchApiView(APIView):
         if pk:
             serializer = self.serializer_class(
                 get_object_or_404(
-                    Merch.objects.filter(id=pk)
+                    MerchShop.objects.filter(id=pk)
                 )
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
-        serializer = self.serializer_class(Merch.objects.all(), many=True)
+        serializer = self.serializer_class(MerchShop.objects.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class PurchaseApiView(APIView):
-    serializer_class = PurchaseSerializer
+class ShoppingCartApiView(APIView):
+    serializer_class = ShoppingCartSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None):
         if pk:
             serializer = self.serializer_class(get_object_or_404(
-                    Purchase.objects.filter(purchaser=request.user.id), pk=pk
+                    ShoppingCart.objects.filter(purchaser=request.user.id), pk=pk
                 )
             )
             return Response(serializer.data, status=status.HTTP_200_OK)
-        serializer = self.serializer_class(Purchase.objects.filter(purchaser=request.user.id), many=True)
+        serializer = self.serializer_class(ShoppingCart.objects.filter(purchaser=request.user.id), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = self.serializer_class(context={'request': request}, data=request.data)
         if serializer.is_valid():
+            items_id = [i.id for i in serializer.validated_data.get('purchased_item')]
+            purchase_amount = sum(MerchShop.objects.filter(id__in=items_id).values_list('price', flat=True))
+            if request.user.currency < purchase_amount:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        instance = get_object_or_404(Purchase.objects.filter(purchaser=request.user.id), pk=pk)
-        instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        instance = get_object_or_404(ShoppingCart.objects.filter(purchaser=request.user.id), pk=pk)
+        if instance.status == "In processing":
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)

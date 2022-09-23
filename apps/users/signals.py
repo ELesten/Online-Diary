@@ -2,7 +2,7 @@ from django.db.models import signals, F
 from django.dispatch import receiver
 from apps.homeworks.models import Homework
 from .models import CustomUser
-from apps.merch.models import Purchase, Merch
+from apps.merch.models import ShoppingCart, MerchShop
 
 
 @receiver(signals.post_save, sender=Homework)
@@ -13,19 +13,17 @@ def currency_accrual(instance, **kwargs):
         pass
 
 
-@receiver(signals.m2m_changed, sender=Purchase.purchased_item.through)
+@receiver(signals.m2m_changed, sender=ShoppingCart.purchased_item.through)
 def currency_debit(instance, action, **kwargs):
-    if action == "post_add":
+    if action == "post_add" and instance.status == "In processing":
         purchase_amount = sum(instance.purchased_item.values_list("price", flat=True))
         CustomUser.objects.filter(id=instance.purchaser.id).update(currency=F("currency") - purchase_amount)
 
 
-@receiver(signals.pre_delete, sender=Purchase)
+@receiver(signals.pre_delete, sender=ShoppingCart)
 def currency_return(instance, **kwargs):
-    purchases = Merch.objects.filter(id__in=instance.purchased_item.values_list("id"))
+    purchases = MerchShop.objects.filter(id__in=instance.purchased_item.values_list("id"))
     purchase_amount = 0
     for purchase in purchases:
         purchase_amount += purchase.price
     CustomUser.objects.filter(id=instance.purchaser.id).update(currency=F("currency") + purchase_amount)
-
-### Разобраться до конца

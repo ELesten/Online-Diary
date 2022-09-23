@@ -12,7 +12,7 @@ class PurchaseStatus(models.TextChoices):
 
 # MODELS
 
-class Merch(models.Model):
+class MerchShop(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField()
@@ -23,9 +23,9 @@ class Merch(models.Model):
         return self.title
 
 
-class Purchase(models.Model):
+class ShoppingCart(models.Model):
     purchaser = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, related_name="purchase", null=True)
-    purchased_item = models.ManyToManyField(Merch, related_name="purchased")
+    purchased_item = models.ManyToManyField(MerchShop, related_name="purchased")
     status = models.CharField(
         max_length=255,
         choices=PurchaseStatus.choices,
