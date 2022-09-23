@@ -1,17 +1,17 @@
 from rest_framework import serializers
-from .models import Merch, Purchase
+from .models import ShoppingCart, MerchShop
 
 
 class MerchSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Merch
+        model = MerchShop
         fields = "__all__"
 
 
-class PurchaseSerializer(serializers.ModelSerializer):
+class ShoppingCartSerializer(serializers.ModelSerializer):
     purchaser = serializers.HiddenField(default=serializers.CurrentUserDefault())
     status = serializers.ReadOnlyField()
 
     class Meta:
-        model = Purchase
+        model = ShoppingCart
         fields = "__all__"
