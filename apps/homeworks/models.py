@@ -1,10 +1,6 @@
 from django.db import models
-from rest_framework.generics import get_object_or_404
-from django.db.models import F
 from apps.users.models import CustomUser
 from apps.tasks.models import Task
-from django.db.models import signals
-from django.dispatch import receiver
 
 # CHOICES
 
@@ -13,6 +9,7 @@ class HomeworkStatus(models.TextChoices):
     PENDING_VERIFICATION = "Pending verification"
     COMPLETED = "Completed"
     WRONG = "Wrong"
+
 
 # MODELS
 
@@ -27,7 +24,7 @@ class Homework(models.Model):
         default=HomeworkStatus.PENDING_VERIFICATION
     )
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="homework")
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True) #Убрать перед мерджем в мейн
 
     def __str__(self):
         return f"Homework for the task {self.connection_with_task.task_name} by {self.author.username}"
