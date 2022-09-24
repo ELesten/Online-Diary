@@ -5,33 +5,24 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
-from project_settings.permissions import IsSchoolRepresentative
+from project_settings.permissions import IsSchoolRepresentative, IsSchoolRepresentativeOrReadOnly
 from django.shortcuts import get_object_or_404
 
 
 class MerchModelViewSet(ModelViewSet):
+    """
+    CRUD to work with the merchandise store for managers.
+    Other users have permissions to save methods only.
+    """
     queryset = MerchShop.objects.all()
     serializer_class = MerchSerializer
-    permission_classes = [IsSchoolRepresentative]
-
-
-class MerchApiView(APIView):
-    serializer_class = MerchSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk=None):
-        if pk:
-            serializer = self.serializer_class(
-                get_object_or_404(
-                    MerchShop.objects.filter(id=pk)
-                )
-            )
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        serializer = self.serializer_class(MerchShop.objects.all(), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    permission_classes = [IsSchoolRepresentativeOrReadOnly]
 
 
 class ShoppingCartApiView(APIView):
+    """
+    Endpoint to work with shopping cart by the users.
+    """
     serializer_class = ShoppingCartSerializer
     permission_classes = [IsAuthenticated]
 
