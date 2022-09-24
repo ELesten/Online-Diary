@@ -15,7 +15,7 @@ class PurchaseStatus(models.TextChoices):
 class MerchShop(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    image = models.ImageField()
+    image = models.ImageField(upload_to="merch.images")
     count = models.IntegerField()
     price = models.IntegerField()
 
