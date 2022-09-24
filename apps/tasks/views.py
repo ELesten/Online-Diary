@@ -29,6 +29,9 @@ class TaskModelViewSet(ModelViewSet):
 
 
 class TaskCommentModelViewSet(ModelViewSet):
+    """
+    CRUD to work with task comments by the users.
+    """
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
     permission_classes = [IsAuthenticated]
