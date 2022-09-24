@@ -2,5 +2,15 @@ from django.contrib import admin
 from .models import *
 
 
-admin.site.register(Homework)
+class CommentInline(admin.TabularInline):
+    model = HomeworkComment
+
+
+class AdminHomework(admin.ModelAdmin):
+    inlines = [
+        CommentInline
+    ]
+
+
+admin.site.register(Homework, AdminHomework)
 admin.site.register(HomeworkComment)
