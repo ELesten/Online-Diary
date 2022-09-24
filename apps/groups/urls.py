@@ -5,7 +5,7 @@ from .views import *
 
 router = routers.DefaultRouter()
 
-router.register(r"group", GroupModelViewSet)
+router.register(r"group-change", GroupModelViewSet)
 
 
 urlpatterns = [
