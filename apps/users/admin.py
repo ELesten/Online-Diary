@@ -3,6 +3,7 @@ from .models import *
 from ..homeworks.models import Homework, HomeworkComment
 from ..merch.models import ShoppingCart
 from ..tasks.models import TaskComment
+from django.contrib.auth.admin import UserAdmin
 
 
 class HomeworkInline(admin.TabularInline):
@@ -21,7 +22,27 @@ class TaskCommentInline(admin.TabularInline):
     model = TaskComment
 
 
-class AdminCustomUser(admin.ModelAdmin):
+class AdminCustomUser(UserAdmin):
+    fieldsets = (
+        (None, {
+            'fields': (
+                'username',
+                'password',
+                'first_name',
+                'last_name',
+                'email',
+                'is_staff',
+                'is_active',
+                'is_superuser',
+                'date_joined',
+                'status',
+                'role',
+                'currency',
+                'group',
+            )
+        }),
+    )
+
     inlines = [
         HomeworkInline,
         HomeworkCommentInline,
