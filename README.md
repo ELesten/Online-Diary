@@ -28,3 +28,5 @@ Api service for the organization of educational processes.
     `python manage.py runserver`
     
 4. Navigate to http://127.0.0.1:8000/
+
+    Test users password: `adminadmin`
