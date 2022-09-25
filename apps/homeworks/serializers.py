@@ -13,7 +13,7 @@ class StudentHomeworkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Homework
-        fields = ["connection_with_task", "description", "links", "author", "id"]  ## Убрать поле "id" после успешных тестов
+        fields = ["connection_with_task", "description", "links", "author"]
 
 
 class HomeworkCommentSerializer(serializers.ModelSerializer):
