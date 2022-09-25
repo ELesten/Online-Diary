@@ -17,6 +17,11 @@ def currency_accrual(instance, **kwargs):
         pass
 
 
+@receiver(signals.pre_save, sender=CustomUser)
+def hash_password(instance, **kwargs):
+    instance.set_password(instance.password)
+
+
 @receiver(signals.m2m_changed, sender=ShoppingCart.purchased_item.through)
 def currency_debit(instance, action, **kwargs):
     """

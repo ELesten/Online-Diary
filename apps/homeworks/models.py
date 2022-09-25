@@ -24,7 +24,7 @@ class Homework(models.Model):
         default=HomeworkStatus.PENDING_VERIFICATION
     )
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="homework")
-    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True) #Убрать перед мерджем в мейн
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return f"Homework for the task {self.connection_with_task.task_name} by {self.author.username}"
@@ -36,4 +36,4 @@ class HomeworkComment(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name="homework_comment")
 
     def __str__(self):
-        return f"Comment to homework № {self.homework.id} by {self.author.username}"
+        return f"Comment to homework {self.homework.id} by {self.author.username}"

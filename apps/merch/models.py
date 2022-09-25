@@ -33,5 +33,5 @@ class ShoppingCart(models.Model):
     )
 
     def __str__(self):
-        return f"Purchase № {self.id} purchaser {self.purchaser.username}"
+        return f"Purchase {self.id} purchaser {self.purchaser.username}"
 
