@@ -33,6 +33,7 @@ class UserInline(admin.TabularInline):
         'status',
         'role',
         'currency',
+        'username',
     ]
 
 
