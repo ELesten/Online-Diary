@@ -15,7 +15,7 @@ Api service for the organization of educational processes.
 
    For Unix-systems:
    
-   `make migrate`(Before running this command, you MUST comment out the 'signals' file in the users application)
+   `make migrate`
    
    `make run`
    
@@ -23,7 +23,7 @@ Api service for the organization of educational processes.
     
     `python manage.py migrate`
     
-    `python manage.py loaddata fixtures.json`(Before running this command, you MUST comment out the 'signals' file in the users application)
+    `python manage.py loaddata fixtures.json`
     
     `python manage.py runserver`
     
