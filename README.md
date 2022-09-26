@@ -20,6 +20,8 @@ Api service for the organization of educational processes.
    `make run`
    
    For Windows or for those who can't get Makefile to run:
+   
+    Before running, rename the .env.example file to .env
     
     `python manage.py migrate`
     
