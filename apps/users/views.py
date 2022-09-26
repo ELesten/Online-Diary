@@ -18,6 +18,12 @@ class UsersModelViewSet(ModelViewSet):
     permission_classes = [
         IsSchoolRepresentative,
     ]
+    filterset_fields = [
+        "status",
+        "role",
+        "group"
+    ]
+
 
 
 class UserPasswordChange(APIView):

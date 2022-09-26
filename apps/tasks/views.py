@@ -15,6 +15,11 @@ class TaskModelViewSet(ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    filterset_fields = [
+        "created_by",
+        "responsible_group",
+    ]
+
 
     def list(self, request, *args, **kwargs):
         queryset = task_role_check(self, request)
@@ -35,6 +40,10 @@ class TaskCommentModelViewSet(ModelViewSet):
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
     permission_classes = [IsAuthenticated]
+    filterset_fields = [
+        "task",
+        "author",
+    ]
 
     def create(self, request, *args, **kwargs):
         user_group = Task.objects.filter(responsible_group=request.user.group).values_list("id", flat=True)

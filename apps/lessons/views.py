@@ -12,4 +12,7 @@ class LessonModelViewSet(ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
-
+    filterset_fields = [
+        "lesson_status",
+        "connection_with_group"
+    ]

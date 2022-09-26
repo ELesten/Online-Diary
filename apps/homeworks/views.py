@@ -15,6 +15,10 @@ class HomeworkModelViewSet(ModelViewSet):
     serializer_class = HomeworkSerializer
     queryset = Homework.objects.all()
     permission_classes = [IsSchoolRepresentative]
+    filterset_fields = [
+        "homework_status",
+        "author",
+    ]
 
 
 class HomeworkCommentModelViewSet(ModelViewSet):
@@ -24,6 +28,9 @@ class HomeworkCommentModelViewSet(ModelViewSet):
     serializer_class = HomeworkCommentSerializer
     queryset = HomeworkComment.objects.all()
     permission_classes = [IsSchoolRepresentative]
+    filterset_fields = [
+        "author",
+    ]
 
 
 class StudentHomeworkApiView(APIView):

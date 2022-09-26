@@ -10,5 +10,9 @@ class GroupModelViewSet(ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [IsSchoolRepresentative]
     queryset = Group.objects.all()
+    filterset_fields = [
+        "teacher",
+        "group_status",
+    ]
 
 

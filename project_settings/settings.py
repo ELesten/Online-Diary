@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.homeworks',
     'apps.lessons',
     'apps.merch',
+    'django_filters',
 
 ]
 
@@ -136,5 +137,8 @@ AUTH_USER_MODEL = 'users.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
 }

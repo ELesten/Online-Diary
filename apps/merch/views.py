@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
-from project_settings.permissions import IsSchoolRepresentative, IsSchoolRepresentativeOrReadOnly
+from project_settings.permissions import IsSchoolRepresentativeOrReadOnly
 from django.shortcuts import get_object_or_404
 
 
@@ -17,6 +17,10 @@ class MerchModelViewSet(ModelViewSet):
     queryset = MerchShop.objects.all()
     serializer_class = MerchSerializer
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    filterset_fields = [
+        "title",
+        "price",
+    ]
 
 
 class ShoppingCartApiView(APIView):
