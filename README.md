@@ -13,6 +13,8 @@ Api service for the organization of educational processes.
 
 3. Run project and filling the database with test data:
 
+   Before running, rename the .env.example file to .env
+
    For Unix-systems:
    
    `make migrate`

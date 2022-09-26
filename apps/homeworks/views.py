@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +16,20 @@ class HomeworkModelViewSet(ModelViewSet):
     serializer_class = HomeworkSerializer
     queryset = Homework.objects.all()
     permission_classes = [IsSchoolRepresentative]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
+    filterset_fields = [
+        'homework_status',
+    ]
+    search_fields = [
+        'author__username',
+    ]
+    ordering_fields = [
+        'homework_status',
+    ]
 
 
 class HomeworkCommentModelViewSet(ModelViewSet):
@@ -24,6 +39,20 @@ class HomeworkCommentModelViewSet(ModelViewSet):
     serializer_class = HomeworkCommentSerializer
     queryset = HomeworkComment.objects.all()
     permission_classes = [IsSchoolRepresentative]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
+    filterset_fields = [
+        'homework__connection_with_task',
+    ]
+    search_fields = [
+        'author__username',
+    ]
+    ordering_fields = [
+        'author',
+    ]
 
 
 class StudentHomeworkApiView(APIView):

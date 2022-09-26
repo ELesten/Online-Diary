@@ -1,4 +1,5 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
@@ -15,6 +16,24 @@ class TaskModelViewSet(ModelViewSet):
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
+    filterset_fields = [
+        'task_name',
+        'created_by',
+        'responsible_group'
+    ]
+    search_fields = [
+        'task_name',
+        'responsible_group__group_name',
+    ]
+    ordering_fields = [
+        'deadline',
+    ]
+
 
     def list(self, request, *args, **kwargs):
         queryset = task_role_check(self, request)
@@ -35,6 +54,22 @@ class TaskCommentModelViewSet(ModelViewSet):
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
+    filterset_fields = [
+        'task',
+        'author',
+    ]
+    search_fields = [
+        'task__task_name',
+        'author',
+    ]
+    ordering_fields = [
+        'task',
+    ]
 
     def create(self, request, *args, **kwargs):
         user_group = Task.objects.filter(responsible_group=request.user.group).values_list("id", flat=True)

@@ -1,11 +1,12 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
-from project_settings.permissions import IsSchoolRepresentative, IsSchoolRepresentativeOrReadOnly
+from project_settings.permissions import IsSchoolRepresentativeOrReadOnly
 from django.shortcuts import get_object_or_404
 
 
@@ -17,6 +18,22 @@ class MerchModelViewSet(ModelViewSet):
     queryset = MerchShop.objects.all()
     serializer_class = MerchSerializer
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
+    filterset_fields = [
+        'title',
+        'price',
+    ]
+    search_fields = [
+        'title',
+        'price',
+    ]
+    ordering_fields = [
+        'price',
+    ]
 
 
 class ShoppingCartApiView(APIView):

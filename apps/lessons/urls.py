@@ -5,7 +5,7 @@ from .views import *
 
 router = routers.DefaultRouter()
 
-router.register(r"lesson", LessonModelViewSet)
+router.register(r"lesson-change", LessonModelViewSet)
 
 
 urlpatterns = [
