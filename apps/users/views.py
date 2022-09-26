@@ -25,7 +25,6 @@ class UsersModelViewSet(ModelViewSet):
     ]
 
 
-
 class UserPasswordChange(APIView):
     """
     Endpoint to change password by the user.

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.lessons',
     'apps.merch',
     'django_filters',
+    'drf_yasg',
 
 ]
 
