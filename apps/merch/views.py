@@ -1,4 +1,5 @@
-from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
@@ -17,9 +18,21 @@ class MerchModelViewSet(ModelViewSet):
     queryset = MerchShop.objects.all()
     serializer_class = MerchSerializer
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
     filterset_fields = [
-        "title",
-        "price",
+        'title',
+        'price',
+    ]
+    search_fields = [
+        'title',
+        'price',
+    ]
+    ordering_fields = [
+        'price',
     ]
 
 
