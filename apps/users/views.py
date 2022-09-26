@@ -1,7 +1,8 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.viewsets import ModelViewSet
 from .serializers import *
 from .models import CustomUser
@@ -18,10 +19,24 @@ class UsersModelViewSet(ModelViewSet):
     permission_classes = [
         IsSchoolRepresentative,
     ]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter
+    ]
     filterset_fields = [
-        "status",
-        "role",
-        "group"
+        'status',
+        'role',
+        'group',
+
+    ]
+    search_fields = [
+        'username',
+    ]
+    ordering_fields = [
+        'status',
+        'role',
+        'currency'
     ]
 
 
