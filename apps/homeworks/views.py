@@ -6,6 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+
+from .functions import homework_role_check
 from .serializers import *
 from project_settings.permissions import *
 
@@ -24,6 +26,7 @@ class HomeworkModelViewSet(ModelViewSet):
     ]
     filterset_fields = [
         'homework_status',
+        'connection_with_task'
     ]
     search_fields = [
         'author__username',
@@ -31,6 +34,17 @@ class HomeworkModelViewSet(ModelViewSet):
     ordering_fields = [
         'homework_status',
     ]
+
+    def list(self, request, *args, **kwargs):
+        queryset = homework_role_check(self, request)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class HomeworkCommentModelViewSet(ModelViewSet):

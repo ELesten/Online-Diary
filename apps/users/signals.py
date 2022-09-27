@@ -11,7 +11,7 @@ def currency_accrual(instance, **kwargs):
     Function that accrues currency to the student for completed tasks.
     :return: None
     """
-    if instance.homework_status == 'Completed' and instance.connection_with_task.deadline < instance.created_at:
+    if instance.homework_status == 'Completed' and instance.connection_with_task.deadline > instance.created_at:
         CustomUser.objects.filter(id=instance.author.id).update(currency=F("currency") + 200)
     else:
         pass
