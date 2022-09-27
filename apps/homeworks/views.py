@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, filters
@@ -114,11 +115,12 @@ class HomeworkCommentApiView(APIView):
     serializer_class = HomeworkCommentSerializer
     permission_classes = [IsSchoolRepresentativeOrReadOnly]
 
-    def get(self, request, pk=None):
+    def get(self, request, pk):
         serializer = self.serializer_class(
             get_object_or_404(
                 HomeworkComment.objects.filter(
-                    homework__connection_with_task__responsible_group=request.user.group, pk=pk
+                    Q(homework=pk) & Q(homework__author=request.user.id) |
+                    Q(homework=pk) & Q(author=request.user.id)
                 )
             )
         )
@@ -135,8 +137,7 @@ class HomeworkCommentApiView(APIView):
 
     def patch(self, request, pk):
         instance = get_object_or_404(
-            HomeworkComment.objects.filter(author=request.user.id),
-            pk=pk
+            HomeworkComment.objects.filter(Q(author=request.user.id) & Q(homework=pk))
         )
         serializer = self.serializer_class(
             instance, context={'request': request},
@@ -147,6 +148,8 @@ class HomeworkCommentApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
-        instance = get_object_or_404(HomeworkComment.objects.filter(author=request.user.id), pk=pk)
+        instance = get_object_or_404(
+            HomeworkComment.objects.filter(Q(author=request.user.id) & Q(homework=pk))
+        )
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

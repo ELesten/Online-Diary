@@ -10,10 +10,19 @@ class HomeworkSerializer(serializers.ModelSerializer):
 
 class StudentHomeworkSerializer(serializers.ModelSerializer):
     author = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    homework_status = serializers.ReadOnlyField()
+    created_at = serializers.ReadOnlyField()
 
     class Meta:
         model = Homework
-        fields = ["connection_with_task", "description", "links", "author"]
+        fields = [
+            "connection_with_task",
+            "description",
+            "links",
+            "author",
+            "homework_status",
+            "created_at"
+        ]
 
 
 class HomeworkCommentSerializer(serializers.ModelSerializer):
