@@ -17,7 +17,9 @@ class MerchModelViewSet(ModelViewSet):
     """
     queryset = MerchShop.objects.all()
     serializer_class = MerchSerializer
-    permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    permission_classes = [
+        IsSchoolRepresentativeOrReadOnly
+    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -41,7 +43,9 @@ class ShoppingCartApiView(APIView):
     Endpoint to work with shopping cart by the users.
     """
     serializer_class = ShoppingCartSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def get(self, request, pk=None):
         if pk:

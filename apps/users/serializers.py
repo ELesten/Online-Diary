@@ -3,6 +3,8 @@ from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    currency = serializers.ReadOnlyField()
+
     class Meta:
         model = CustomUser
         fields = ['email', 'username', 'password', 'role', 'first_name', 'last_name', 'group', 'currency']

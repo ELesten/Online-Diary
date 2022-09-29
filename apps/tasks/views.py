@@ -15,7 +15,9 @@ class TaskModelViewSet(ModelViewSet):
     """
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
-    permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    permission_classes = [
+        IsSchoolRepresentativeOrReadOnly,
+    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -53,7 +55,9 @@ class TaskCommentModelViewSet(ModelViewSet):
     """
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated
+    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
