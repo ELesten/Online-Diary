@@ -17,6 +17,7 @@ class UsersModelViewSet(ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [
+        IsAuthenticated,
         IsSchoolRepresentative,
     ]
     filter_backends = [

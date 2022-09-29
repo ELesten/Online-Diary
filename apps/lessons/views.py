@@ -16,7 +16,9 @@ class LessonModelViewSet(ModelViewSet):
     """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    permission_classes = [
+        IsSchoolRepresentativeOrReadOnly
+    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,

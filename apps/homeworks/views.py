@@ -18,7 +18,10 @@ class HomeworkModelViewSet(ModelViewSet):
     """
     serializer_class = HomeworkSerializer
     queryset = Homework.objects.all()
-    permission_classes = [IsSchoolRepresentative]
+    permission_classes = [
+        IsAuthenticated,
+        IsSchoolRepresentative
+    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -53,7 +56,10 @@ class HomeworkCommentModelViewSet(ModelViewSet):
     """
     serializer_class = HomeworkCommentSerializer
     queryset = HomeworkComment.objects.all()
-    permission_classes = [IsSchoolRepresentative]
+    permission_classes = [
+        IsAuthenticated,
+        IsSchoolRepresentative,
+    ]
     filter_backends = [
         DjangoFilterBackend,
         filters.SearchFilter,
@@ -76,7 +82,9 @@ class StudentHomeworkApiView(APIView):
     and a detailed modification of each of them.
     """
     serializer_class = StudentHomeworkSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated
+    ]
 
     def get(self, request, pk=None):
         if pk:
@@ -127,7 +135,9 @@ class HomeworkCommentApiView(APIView):
     Students only have permissions to safe methods.
     """
     serializer_class = HomeworkCommentSerializer
-    permission_classes = [IsSchoolRepresentativeOrReadOnly]
+    permission_classes = [
+        IsSchoolRepresentativeOrReadOnly
+    ]
 
     def get(self, request, pk):
         serializer = self.serializer_class(
